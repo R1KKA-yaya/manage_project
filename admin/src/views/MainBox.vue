@@ -1,15 +1,12 @@
 <script setup>
 
 </script>
-
 <template>
-  傻逼
+  <div>navbar</div>
+  <div>sidebar</div>
+
   <router-view></router-view>
 </template>
+<style lang="scss" scoped>
 
-<style scoped lang="scss">
-*{ 
-  margin: 0;
-  padding: 0;
-}
 </style>
