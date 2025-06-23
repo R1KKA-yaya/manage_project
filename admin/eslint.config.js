@@ -16,6 +16,7 @@ export default defineConfig([
     languageOptions: {
       globals: {
         ...globals.browser,
+        
       },
     },
   },
@@ -23,4 +24,11 @@ export default defineConfig([
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
   skipFormatting,
+   // 新增规则覆盖配置
+  {
+    rules: {
+      // 关闭 Vue 组件名必须多单词的限制
+      "vue/multi-word-component-names": "off"
+    }
+  },
 ])

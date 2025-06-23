@@ -3,7 +3,6 @@
 </script>
 
 <template>
-  傻逼
   <router-view></router-view>
 </template>
 

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/Login.vue'
-import MainBox from '../views/MainBox.vue'
+import Login from '@/views/Login.vue'
+import MainBox from '@/views/MainBox.vue'
+import routesConfig from '@/router/config'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,5 +19,31 @@ const router = createRouter({
     //mainbox的嵌套路由，后面通过权限动态添加
   ],
 })
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  // 如果要去登录页面
+  if(to.name==='login'){
+    next()
+  }else{
+    // 如果未授权
+    if(!localStorage.getItem('token')){
+      next({
+        path:'/login'
+      })
+    }else{
+      ConfigRouter()
+      next({
+        path:to.fullPath
+      })
+    }
+  }
+})
+
+const ConfigRouter = () => { 
+  routesConfig.forEach(item => {
+  router.addRoute("mainbox",item)
+})
+}
 
 export default router
