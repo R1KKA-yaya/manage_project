@@ -23,11 +23,6 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  console.log('路由守卫触发:',
-    `从 ${from.path} 到 ${to.path}`,
-    `完整路径: ${to.fullPath}`,
-    `是否刷新: ${performance.navigation.type === 1 ? '是' : '否'}`
-  )
   // 在路由内部获取store实例, 确保pinia已经安装好了
   const LoginStore = useLoginStore()
   // 如果要去登录页面
