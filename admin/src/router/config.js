@@ -6,6 +6,7 @@ import ProductAdd from '@/views/product-manage/ProductAdd.vue'
 import ProductList from '@/views/product-manage/ProductList.vue'
 import UserAdd from '@/views/user-manage/UserAdd.vue'
 import UserList from '@/views/user-manage/UserList.vue'
+import NotFound from '@/views/notfound/NotFound.vue'
 
 const routes = [
   {
@@ -39,6 +40,15 @@ const routes = [
   {
     path:'/user-manage/userlist',
     component:UserList
+  },
+  {
+    path:'/',
+    redirect:'/index'
+  },
+  {
+    path:'/:pathMatch(.*)*',
+    name:'Notfound',
+    component:NotFound
   }
 ]
 
