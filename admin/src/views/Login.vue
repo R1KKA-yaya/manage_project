@@ -1,6 +1,6 @@
 <script setup>
   import {reactive,ref} from 'vue'
-  import {useRouter } from 'vue-router'
+  import { useRouter } from 'vue-router'
 
   const router = useRouter()
 
@@ -103,9 +103,9 @@
     loginFormRef.value.validate((valid)=>{
       if(valid){
         console.log(loginForm)
+        localStorage.setItem('token','kerwin')
+        router.push('/index')
       }
-      localStorage.setItem('token','kerwin')
-      router.push('/index')
     })
 
   }

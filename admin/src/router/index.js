@@ -37,7 +37,7 @@ router.beforeEach((to, from, next) => {
     } else {
       if (!LoginStore.isGetterRouter) {
         ConfigRouter()
-        LoginStore.changeGetterRouter(true)
+        LoginStore.isGetterRouter = true
         next({
           path: to.fullPath
         })
