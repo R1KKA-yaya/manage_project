@@ -26,4 +26,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    proxy: {
+      '/adminapi': {
+        target: 'http://localhost:3000', // 替换为实际后端地址
+        changeOrigin: true,
+      }
+    }
+  }
 })

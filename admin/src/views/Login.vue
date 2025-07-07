@@ -1,6 +1,7 @@
 <script setup>
   import {reactive,ref} from 'vue'
   import { useRouter } from 'vue-router'
+  import axios from 'axios'
 
   const router = useRouter()
 
@@ -104,10 +105,12 @@
       if(valid){
         console.log(loginForm)
         localStorage.setItem('token','kerwin')
+        axios.post('/adminapi/user/login',loginForm).then(res=>{
+          console.log(res.data)
+        })
         router.push('/index')
       }
     })
-
   }
 </script>
 <template>
