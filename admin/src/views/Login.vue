@@ -2,6 +2,7 @@
   import {reactive,ref} from 'vue'
   import { useRouter } from 'vue-router'
   import axios from 'axios'
+  import { ElMessage } from 'element-plus'
 
   const router = useRouter()
 
@@ -103,12 +104,13 @@
     // 校验表单
     loginFormRef.value.validate((valid)=>{
       if(valid){
-        console.log(loginForm)
-        localStorage.setItem('token','kerwin')
         axios.post('/adminapi/user/login',loginForm).then(res=>{
-          console.log(res.data)
+          if(res.data.ActionType==='OK'){
+            router.push('/index')
+          }else{
+            ElMessage.error('用户名密码不匹配')
+          }
         })
-        router.push('/index')
       }
     })
   }

@@ -6,7 +6,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const UserRouter = require('./routes/admin/UserRouter')
+const UserRouter = require('./routes/admin/UserRouter');
+const JWT = require('./util/JWT');
 
 var app = express();
 
@@ -22,6 +23,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use((req,res,next)=>{
+  if(req.url==='/adminapi/user/login'){
+    next()
+    return
+  }
+  const token = req.headers['authorization'].split(' ')[1]
+  if(token){
+    console.log(token)
+    const payload = JWT.vertify(token)
+    if(payload){
+      const newToken = JWT.generate({
+        _id:payload._id,
+        username:payload.username
+      },'1d')
+      res.header('Authorization',newToken)
+    }else{
+      res.status(401).send({errCode:'-1',errorInfo:'token过期'})
+    }
+  }
+  next()
+})
 
 app.use(UserRouter)
 

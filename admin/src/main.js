@@ -11,6 +11,7 @@ import { loadFull } from "tsparticles";
 
 import App from './App.vue'
 import router from './router'
+import '@/util/axios.config'
 
 const app = createApp(App)
 
