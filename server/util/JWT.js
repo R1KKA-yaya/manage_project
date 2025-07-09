@@ -6,7 +6,7 @@ const JWT = {
   },
   vertify(token){
     try{
-        return jsonwebtoken.verify(token,secret)
+      return jsonwebtoken.verify(token,secret)
     }catch(e){
       return false
     }

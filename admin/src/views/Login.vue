@@ -3,8 +3,10 @@
   import { useRouter } from 'vue-router'
   import axios from 'axios'
   import { ElMessage } from 'element-plus'
+  import { useUserStore } from '@/stores/user'
 
   const router = useRouter()
+  const UserStore = useUserStore()
 
   const particlesLoaded = async container => {
     console.log("Particles container loaded", container);
@@ -106,6 +108,7 @@
       if(valid){
         axios.post('/adminapi/user/login',loginForm).then(res=>{
           if(res.data.ActionType==='OK'){
+            UserStore.userInfo = res.data.data
             router.push('/index')
           }else{
             ElMessage.error('用户名密码不匹配')

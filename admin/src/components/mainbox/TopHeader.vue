@@ -1,11 +1,14 @@
 <script setup>
 import { useSettingStore } from '@/stores/setting'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+const UserStore =useUserStore()
 const router = useRouter()
 const SettingStore = useSettingStore()
 
 const handleLogout = () => {
   localStorage.removeItem('token')
+  UserStore.userInfo = {}
   router.push('/login')
 }
 </script>
@@ -16,7 +19,7 @@ const handleLogout = () => {
   <span style="margin-left: 10px;">企业门户管理系统</span>
   </div>
   <div class="right">
-    <span>欢迎 admin 回来</span>
+    <span>欢迎 {{ UserStore.userInfo.username }} 回来</span>
     <el-dropdown>
       <span class="el-dropdown-link">
       <el-icon size="30" color="white"><User /></el-icon>
