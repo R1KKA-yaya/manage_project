@@ -6,7 +6,7 @@ const SettingStore = useSettingStore()
 
 </script>
 <template>
-  <el-aside width="auto">
+  <el-aside :width="SettingStore.isCollapsed?'64px':'200px'">
       <el-menu :collapse="SettingStore.isCollapsed"
       router
       :default-active="route.fullPath"
@@ -49,6 +49,7 @@ const SettingStore = useSettingStore()
 <style lang="scss" scoped>
   .el-aside{
     height: 100vh;
+    transition: width 0.3s ease;  /* 关键：让宽度变化有动画 */
     .el-menu{
       height: 100%;
     }
