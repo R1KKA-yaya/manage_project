@@ -108,7 +108,7 @@
       if(valid){
         axios.post('/adminapi/user/login',loginForm).then(res=>{
           if(res.data.ActionType==='OK'){
-            UserStore.userInfo = res.data.data
+            UserStore.updateUserInfo(res.data.data)
             router.push('/index')
           }else{
             ElMessage.error('用户名密码不匹配')

@@ -27,7 +27,33 @@ const UserController = {
         }
       })
     }
-    // 
+  },
+  upload:async(req,res) => {
+    const { username, gender, introduction } = req.body
+    const avatar = req.file?`avataruploads/${req.file.filename}`:''
+    const token = req.headers['authorization'].split(' ')[1]
+    const payload = JWT.vertify(token)
+    await UserService.upload({_id:payload._id,username,gender:Number(gender),introduction,avatar})
+    if(avatar){
+        res.send({
+        ActionType:'OK',
+        data:{
+          username,
+          gender:Number(gender),
+          introduction,
+          avatar
+        }
+      })
+    }else{
+       res.send({
+        ActionType:'OK',
+        data:{
+          username,
+          gender:Number(gender),
+          introduction
+        }
+      })
+    }
   }
 }
 

@@ -2,7 +2,7 @@
 import { useUserStore } from '@/stores/user'
 import { computed } from 'vue';
 const UserStore =useUserStore()   
-const avatarUrl = computed(()=>UserStore.userInfo.avatar?UserStore.userInfo.avatar:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
+const avatarUrl = computed(()=>UserStore.userInfo.avatar?'http://localhost:3000/'+ UserStore.userInfo.avatar:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 const welcomeText = computed(()=>new Date().getHours()<=12?'要开心每一天.':'喝杯咖啡提提神吧.')
 </script>
 <template>

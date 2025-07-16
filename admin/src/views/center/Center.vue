@@ -1,8 +1,11 @@
 <script setup>
 import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
+import upload from '@/util/upload';
+import Upload from '@/components/upload/Upload.vue';
 const UserStore =useUserStore()   
-const avatarUrl = computed(()=>UserStore.userInfo.avatar?UserStore.userInfo.avatar:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
+const avatarUrl = computed(()=>UserStore.userInfo.avatar?'http://localhost:3000/'+ UserStore.userInfo.avatar:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 // 表单
 const userFormRef = ref()
 const {username,gender,introduction,avatar} = UserStore.userInfo
@@ -10,8 +13,10 @@ const userForm = reactive({
   username,
   gender,
   introduction,
-  avatar
+  avatar,
+  file:null
 })
+// const userForm = computed(() => UserStore.userInfo)
 const userFormRules = reactive({
   username: [
     { required: true, message: '请输入名字', trigger: 'blur' },
@@ -32,6 +37,27 @@ const options = [
   {label:'男',value:1},
   {label:'女',value:2}
 ]
+
+// 每次选择完图片之后的回调
+const handleChange = (file) => {
+  userForm.avatar = URL.createObjectURL(file.raw)
+  userForm.file = file.raw
+}
+
+// 更新表单
+const submitForm = () => {
+   // 校验表单
+    userFormRef.value.validate(async(valid)=>{
+      if(valid){
+        const res = await upload('/adminapi/user/upload',userForm)
+          if(res.ActionType==="OK"){
+            UserStore.updateUserInfo(res.data)
+            ElMessage.success('更新成功')
+          }
+      }
+    }
+    )
+}
 </script>
 <template>
   <el-page-header icon="" title="企业门户管理网站">
@@ -73,15 +99,12 @@ const options = [
             <el-input v-model="userForm.introduction" type="textarea"/>
           </el-form-item>
           <el-form-item label="头像" prop="avatar">
-             <el-upload
-              class="avatar-uploader"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-              :show-file-list="false"
-              :auto-upload="false"
-            >
-              <img v-if="userForm.avatar" :src="userForm.avatar" class="avatar" />
-              <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-            </el-upload>
+            <Upload :avatar="userForm.avatar" @changeAvatar="handleChange"></Upload>
+          </el-form-item>
+          <el-form-item  label=" ">
+            <el-button type="primary" @click="submitForm">
+              更新
+            </el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -92,26 +115,6 @@ const options = [
 .el-row{
   margin-top: 20px;
   .box-card{
-    text-align: center;
-  }
-  .avatar-uploader :deep(.el-upload)  {
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-  }
-
-  .avatar-uploader :deep(.el-upload:hover) {
-    border-color: var(--el-color-primary);
-  }
-
-  :deep(.el-icon.avatar-uploader-icon) {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
     text-align: center;
   }
 }

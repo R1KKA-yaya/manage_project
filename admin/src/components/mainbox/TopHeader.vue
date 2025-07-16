@@ -8,7 +8,7 @@ const SettingStore = useSettingStore()
 
 const handleLogout = () => {
   localStorage.removeItem('token')
-  UserStore.userInfo = {}
+  UserStore.clearUserInfo()
   router.push('/login')
 }
 </script>
