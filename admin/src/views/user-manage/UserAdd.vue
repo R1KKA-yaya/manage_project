@@ -1,20 +1,21 @@
 <script setup>
-import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import upload from '@/util/upload';
-import Upload from '@/components/upload/Upload.vue';
-const UserStore =useUserStore()   
+import Upload from '@/components/upload/Upload.vue'; 
 // 表单
 const userFormRef = ref()
 
+const router = useRouter()
 const userForm = reactive({
   username:'',
   password:'',
   role:2,
   introduction:'',
   avatar:'',
-  file:null
+  file:null,
+  gender:0 //保密
 })
 
 const userFormRules = reactive({
@@ -51,7 +52,10 @@ const submitForm = () => {
    // 校验表单
     userFormRef.value.validate(async(valid)=>{
       if(valid){
-        console.log(userForm)
+        // 提交数据到后端
+        await upload('/adminapi/user/add',userForm)
+        router.push('/user-manage/userlist')
+        ElMessage.success('添加用户成功')
       }
     })
 }

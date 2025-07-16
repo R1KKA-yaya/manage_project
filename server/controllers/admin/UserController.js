@@ -28,6 +28,14 @@ const UserController = {
       })
     }
   },
+  add:async(req,res) => {
+    const { username, gender, introduction, role, password } = req.body
+    const avatar = req.file?`avataruploads/${req.file.filename}`:''
+    await UserService.add({username, gender:Number(gender), introduction, role:Number(role), password, avatar})
+    res.send({
+      ActionType:'OK'
+    })
+  },
   upload:async(req,res) => {
     const { username, gender, introduction } = req.body
     const avatar = req.file?`avataruploads/${req.file.filename}`:''
