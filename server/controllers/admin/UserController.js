@@ -62,6 +62,13 @@ const UserController = {
         }
       })
     }
+  },
+  getList:async (req,res) => {
+    const data = await UserService.getList()
+    res.send({
+      ActionType:'OK',
+      data
+    })
   }
 }
 
