@@ -29,6 +29,9 @@ const UserService = {
   },
   getList:async() => {
     return UserModel.find({},['username','role','avatar','gender','introduction'])
+  },
+  delList:async({_id}) => {
+    return UserModel.deleteOne({_id})
   }
 }
 
