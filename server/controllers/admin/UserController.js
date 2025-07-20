@@ -64,10 +64,18 @@ const UserController = {
     }
   },
   getList:async (req,res) => {
-    const data = await UserService.getList()
+    const {id} = req.params
+    const data = await UserService.getList({_id:id})
     res.send({
       ActionType:'OK',
       data
+    })
+  },
+  putList:async (req,res) => {
+    const {_id,username, introduction, role, password} = req.body
+    await UserService.putList({_id,username, introduction, role, password})
+    res.send({
+      ActionType:'OK'
     })
   },
   delList:async (req,res) => {

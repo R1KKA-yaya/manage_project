@@ -27,8 +27,15 @@ const UserService = {
       username,introduction,gender,avatar,password,role
     })
   },
-  getList:async() => {
-    return UserModel.find({},['username','role','avatar','gender','introduction'])
+  getList:async({_id}) => {
+    return _id ? UserModel.find({_id},['username','role','password','introduction']) : UserModel.find({},['username','role','avatar','gender','introduction'])
+  },
+  putList:async({_id,username, introduction, role, password}) => {
+    return UserModel.updateOne({
+              _id
+          },{
+              username, introduction, role, password
+          })
   },
   delList:async({_id}) => {
     return UserModel.deleteOne({_id})

@@ -1,6 +1,7 @@
 <script setup>
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { ElMessage } from 'element-plus';
+import { onMounted, reactive, ref } from 'vue';
 
 const tableData = ref([])
 const getTableData = async () => {
@@ -10,12 +11,54 @@ const getTableData = async () => {
 onMounted(()=>{
   getTableData()
 })
-const handleEdit = (data) => {
-  console.log(data)
+
+const handleEdit = async (data) => {
+  dialogFormVisible.value = true
+  const res = await axios.get(`/adminapi/user/list/${data._id}`)
+  Object.assign(userForm, res.data.data[0]);
+  console.log(res)
 }
 const handleDelete = async (data) => {
   await axios.delete(`/adminapi/user/list/${data._id}`)
   getTableData()
+}
+
+const dialogFormVisible = ref(false)
+const userFormRef = ref()
+const formLabelWidth = '140px'
+
+const userForm = reactive({
+  username: 'sb',
+  password: '',
+  role: 2,
+  introduction: '',
+})
+
+const userFormRules = reactive({
+  username: [
+    { required: true, message: '请输入名字', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+  ],
+  role: [
+    { required: true, message: '请选择角色', trigger: 'blur' },
+  ],
+  introduction: [
+    { required: true, message: '请输入介绍', trigger: 'blur' },
+  ],
+})
+
+const handleEditConfirm = () => {
+  userFormRef.value.validate(async(valid)=>{
+      if(valid){
+        // 提交数据到后端
+        await axios.put(`/adminapi/user/list/${userForm._id}`,userForm)
+        ElMessage.success('编辑用户成功')
+        getTableData()
+        dialogFormVisible.value = false
+      }
+    })
 }
 </script>
 <template>
@@ -58,6 +101,40 @@ const handleDelete = async (data) => {
       </template>
     </el-table-column>
   </el-table>
+  <el-dialog v-model="dialogFormVisible" title="编辑用户" width="30%">
+    <el-form 
+    :model="userForm"
+    ref="userFormRef"
+    :rules="userFormRules">
+      <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
+        <el-input v-model="userForm.username" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+        <el-input v-model="userForm.password" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="角色" :label-width="formLabelWidth" prop="role">
+        <el-select v-model="userForm.role" placeholder="请选择角色">
+          <el-option label="管理员" :value="1" />
+          <el-option label="编辑" :value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="个人简介" :label-width="formLabelWidth" prop="introduction">
+       <el-input
+        v-model="userForm.introduction"
+        :rows="2"
+        type="textarea"
+      />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleEditConfirm">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 <style lang="scss" scoped>
 .el-table{

@@ -26,7 +26,7 @@ const userFormRules = reactive({
     { required: true, message: '请输入密码', trigger: 'blur' },
   ],
   gender: [
-    { required: true, message: '请选择角色', trigger: 'blur' },
+    { required: true, message: '请选择性别', trigger: 'blur' },
   ],
   introduction: [
     { required: true, message: '请输入介绍', trigger: 'blur' },
@@ -93,7 +93,7 @@ const submitForm = () => {
     </el-form-item>
     <el-form-item  label=" ">
       <el-button type="primary" @click="submitForm">
-        更新
+        添加
       </el-button>
     </el-form-item>
   </el-form>
