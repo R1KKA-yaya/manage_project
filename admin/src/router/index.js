@@ -3,6 +3,7 @@ import Login from '@/views/Login.vue'
 import MainBox from '@/views/MainBox.vue'
 import routesConfig from '@/router/config'
 import { useLoginStore } from '@/stores/login'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,8 +37,9 @@ router.beforeEach((to, from, next) => {
       })
     } else {
       if (!LoginStore.isGetterRouter) {
+        router.removeRoute('mainbox')
         ConfigRouter()
-        LoginStore.isGetterRouter = true
+        LoginStore.changeGetterRouter(true)
         next({
           path: to.fullPath
         })
@@ -49,9 +51,24 @@ router.beforeEach((to, from, next) => {
 })
 
 const ConfigRouter = () => {
+  if(!router.hasRoute('mainbox')){
+    router.addRoute({
+      path: '/mainbox',
+      name: 'mainbox',
+      component: MainBox
+    })
+  }
   routesConfig.forEach(item => {
-    router.addRoute("mainbox", item)
+    checkPermission(item) && router.addRoute("mainbox", item)
   })
+}
+
+const checkPermission = (item) => {
+  const UserStore = useUserStore()
+  if(item.requireAdmin){
+    return UserStore.userInfo.role === 1
+  }
+  return true
 }
 
 export default router

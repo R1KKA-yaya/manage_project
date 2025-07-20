@@ -4,9 +4,12 @@
   import axios from 'axios'
   import { ElMessage } from 'element-plus'
   import { useUserStore } from '@/stores/user'
+  import { useLoginStore } from '@/stores/login'
 
   const router = useRouter()
   const UserStore = useUserStore()
+  const LoginStore = useLoginStore()
+
 
   const particlesLoaded = async container => {
     console.log("Particles container loaded", container);
@@ -109,6 +112,7 @@
         axios.post('/adminapi/user/login',loginForm).then(res=>{
           if(res.data.ActionType==='OK'){
             UserStore.updateUserInfo(res.data.data)
+            LoginStore.changeGetterRouter(false)
             router.push('/index')
           }else{
             ElMessage.error('用户名密码不匹配')

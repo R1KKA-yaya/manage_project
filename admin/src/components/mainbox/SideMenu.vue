@@ -1,9 +1,18 @@
 <script setup>
 import { useSettingStore } from '@/stores/setting'
 import { useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 const route = useRoute()
+const UserStore = useUserStore()
 const SettingStore = useSettingStore()
 
+const vAdmin = {
+  mounted (el) {
+    if(UserStore.userInfo.role !== 1){
+      el.parentNode.removeChild(el)
+    }
+  }
+}
 </script>
 <template>
   <el-aside :width="SettingStore.isCollapsed?'64px':'200px'">
@@ -19,7 +28,7 @@ const SettingStore = useSettingStore()
           <el-icon><avatar /></el-icon>
           <span>个人中心</span>
         </el-menu-item>
-        <el-sub-menu index="/user-manage">
+        <el-sub-menu index="/user-manage" v-admin>
             <template #title>
               <el-icon><userFilled /></el-icon>
               <span>用户管理</span>
