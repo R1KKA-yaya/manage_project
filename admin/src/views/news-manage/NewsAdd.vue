@@ -4,27 +4,29 @@ import Editor from '@/components/editor/Editor.vue';
 import Upload from '@/components/upload/Upload.vue';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
+import upload from '@/util/upload';
 
 const newsFormRef = ref()
 const newsForm = reactive({
   title:'',
   content:'',
-  class:0,
+  category:0,
   cover:'',
-  file:null
+  isPublish:0, // 0未发布 1已发布
+  file:null,
 })
 const newsFormRules = reactive({
   title: [
-    { required: true, message: '请输入名字', trigger: 'blur' },
+    { required: true, message: '请输入标题', trigger: 'blur' },
   ],
   content: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
+    { required: true, message: '请输入内容', trigger: 'blur' },
   ],
-  class: [
-    { required: true, message: '请选择性别', trigger: 'blur' },
+  category: [
+    { required: true, message: '请选择类别', trigger: 'blur' },
   ],
   cover: [
-    { required: true, message: '请输入介绍', trigger: 'blur' },
+    { required: true, message: '请选择封面', trigger: 'blur' },
   ],
 })
 const options = [
@@ -34,7 +36,7 @@ const options = [
 ]
 
 const handleEditorChange = (newVal) => {
-  newsForm.content = newVal
+  newsForm.content = (newVal === '<p><br></p>') ? '' : newVal
 }
 
 // 每次选择完图片之后的回调
@@ -48,10 +50,10 @@ const submitForm = () => {
    // 校验表单
     newsFormRef.value.validate(async(valid)=>{
       if(valid){
-        // 提交数据到后端
         console.log(newsForm)
+        await upload('/adminapi/news/add',newsForm)
         router.push('/news-manage/newslist')
-        ElMessage.success('添加用户成功')
+        ElMessage.success('创建新闻成功')
       }
     })
 }
@@ -76,8 +78,8 @@ const submitForm = () => {
     <el-form-item label="内容" prop="content">
       <Editor @contentChange="handleEditorChange"></Editor>
     </el-form-item>
-    <el-form-item label="类别" prop="class">
-      <el-select v-model="newsForm.class" placeholder="请选择类别">
+    <el-form-item label="类别" prop="category">
+      <el-select v-model="newsForm.category" placeholder="请选择类别">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </el-form-item>

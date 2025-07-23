@@ -9,7 +9,7 @@ const emits = defineEmits(['content-change'])
 const editorRef = shallowRef(null)
 
 // 编辑器内容
-const valueHtml = ref()
+const valueHtml = ref('')
 
 // 编辑器配置
 const mode = ref('default')
