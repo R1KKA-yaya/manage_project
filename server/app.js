@@ -40,7 +40,7 @@ app.use((req,res,next)=>{
       },'1d')
       res.header('Authorization',newToken)
     }else{
-      res.status(401).send({errCode:'-1',errorInfo:'token过期'})
+      return res.status(401).send({errCode:'-1',errorInfo:'token过期'})
     }
   }
   next()
