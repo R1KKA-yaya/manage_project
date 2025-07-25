@@ -22,6 +22,13 @@ const NewsController = {
       ActionType:'OK',
       data
     })
+  },
+  publish:async (req,res) => {
+    const { _id, isPublish } = req.body
+    await NewsService.publish({ _id, isPublish, editTime:new Date() })
+    res.send({
+      ActionType:'OK'
+    })
   }
 }
 

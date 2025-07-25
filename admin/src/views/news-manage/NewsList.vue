@@ -17,6 +17,14 @@ onMounted(()=>{
   getTableData()
 })
 
+const handleSwitchChange = async (item) => {
+  await axios.put('/adminapi/news/publish',{
+    _id:item._id,
+    isPublish:item.isPublish
+  })
+  await getTableData()
+}
+
 </script>
 <template>
   <el-card>
@@ -41,7 +49,8 @@ onMounted(()=>{
         <template #default="scope">
           <el-switch v-model="scope.row.isPublish" 
           :active-value="1"
-          :inactive-value="0"/>
+          :inactive-value="0"
+          @change="handleSwitchChange(scope.row)"/>
         </template>
       </el-table-column>
       <el-table-column label="操作">
