@@ -4,7 +4,9 @@ import { onMounted, ref } from 'vue';
 import { View, Edit, Delete } from '@element-plus/icons-vue'
 import formatTime from '@/util/formatTime';
 
-const tableData = ref()
+const tableData = ref([])
+const previewData = ref({})
+const dialogFormVisible = ref(false)
 const getTableData = async () => {
   const res = await axios.get('/adminapi/news/list')
   tableData.value = res.data.data
@@ -25,6 +27,13 @@ const handleSwitchChange = async (item) => {
   await getTableData()
 }
 
+const handlePreview = (item) => {
+  previewData.value = item
+  dialogFormVisible.value = true
+  console.log(previewData)
+  
+}
+
 </script>
 <template>
   <el-card>
@@ -39,7 +48,7 @@ const handleSwitchChange = async (item) => {
         <template #default="scope">
           {{ categoryFormat(scope.row.category) }}
         </template>
-      </el-table-column>
+      </el-table-column>             
       <el-table-column prop="editTime" label="更新时间" width="180">
         <template #default="scope">
           {{ formatTime.getTime(scope.row.editTime) }}
@@ -58,7 +67,8 @@ const handleSwitchChange = async (item) => {
           <el-button
             type="success"
             :icon="View"
-            circle />
+            circle
+            @click="handlePreview(scope.row)" />
           <el-button 
             :icon="Edit" 
             circle />
@@ -70,7 +80,23 @@ const handleSwitchChange = async (item) => {
       </el-table-column>
     </el-table>
   </el-card>
+  <el-dialog v-model="dialogFormVisible" title="预览新闻" width="30%">
+    <div>
+      <h2>{{ previewData.title }}</h2>
+      <div style="font-size: 12px; color: grey;">
+      {{ formatTime.getTime(previewData.editTime) }}
+      </div>
+      <el-divider>
+        <el-icon><star-filled /></el-icon>
+      </el-divider>
+      <div v-html="previewData.content" class="htmlcontent"></div>
+    </div>
+  </el-dialog>
 </template>
 <style lang="scss" scoped>
-
+:deep(.htmlcontent){
+  img{
+    width: 100%;
+  }
+}
 </style>

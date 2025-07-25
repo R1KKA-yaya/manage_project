@@ -6,7 +6,7 @@ const NewsService = {
     })
   },
   getList:async() => {
-    return NewsModel.find({},['title','category','isPublish','editTime'])
+    return NewsModel.find({},['title','category','isPublish','editTime','content'])
   },
   publish:async({_id, isPublish, editTime}) => {
     return NewsModel.updateOne({ _id },{
