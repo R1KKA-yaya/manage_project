@@ -19,6 +19,7 @@ const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
+
 app.use(Particles, {
   init: async engine => {
     await loadFull(engine);  // 使用完整加载器

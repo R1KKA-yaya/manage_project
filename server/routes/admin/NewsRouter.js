@@ -4,6 +4,7 @@ const NewsController = require('../../controllers/admin/NewsController')
 const multer = require('multer')
 const upload = multer({ dest:'public/newsuploads/'})
 
+NewsRouter.get('/adminapi/news/list',NewsController.getList)
 NewsRouter.post('/adminapi/news/add',upload.single('file'),NewsController.add)
 
 module.exports = NewsRouter;

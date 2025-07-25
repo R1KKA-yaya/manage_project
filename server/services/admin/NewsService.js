@@ -5,6 +5,9 @@ const NewsService = {
       title,content,category,isPublish,cover,editTime
     })
   },
+  getList:async() => {
+    return NewsModel.find({},['title','category','isPublish','editTime'])
+  }
 }
 
 module.exports = NewsService
