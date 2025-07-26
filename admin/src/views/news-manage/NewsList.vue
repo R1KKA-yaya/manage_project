@@ -31,7 +31,11 @@ const handlePreview = (item) => {
   previewData.value = item
   dialogFormVisible.value = true
   console.log(previewData)
-  
+}
+
+const handleDelete = async (item) => {
+  await axios.delete(`/adminapi/news/list/${item._id}`)
+  await getTableData()
 }
 
 </script>
@@ -72,10 +76,17 @@ const handlePreview = (item) => {
           <el-button 
             :icon="Edit" 
             circle />
-          <el-button 
-            type="danger" 
-            :icon="Delete" 
-            circle />
+          <el-popconfirm title="你确定要删除吗？"
+            confirmButtonText="确定"
+            cancelButtonText="取消"
+            @confirm="handleDelete(scope.row)">
+              <template #reference>
+                <el-button 
+                type="danger" 
+                :icon="Delete" 
+                circle />
+              </template>
+            </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>

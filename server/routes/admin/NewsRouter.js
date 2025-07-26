@@ -6,6 +6,7 @@ const upload = multer({ dest:'public/newsuploads/'})
 
 NewsRouter.get('/adminapi/news/list',NewsController.getList)
 NewsRouter.post('/adminapi/news/add',upload.single('file'),NewsController.add)
+NewsRouter.delete('/adminapi/news/list/:id',NewsController.delList)
 NewsRouter.put('/adminapi/news/publish',NewsController.publish)
 
 module.exports = NewsRouter;

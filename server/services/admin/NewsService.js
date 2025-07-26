@@ -13,6 +13,9 @@ const NewsService = {
       isPublish,
       editTime
     })
+  },
+  delList:async({ _id }) => {
+    return NewsModel.deleteOne({ _id })
   }
 }
 
