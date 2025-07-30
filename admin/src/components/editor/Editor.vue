@@ -1,12 +1,19 @@
 <script setup>
 import '@wangeditor/editor/dist/css/style.css'
-import { ref, shallowRef, onBeforeUnmount, defineEmits, watch } from 'vue'
+import { ref, shallowRef, onBeforeUnmount, defineEmits } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 const emits = defineEmits(['content-change'])
 
 // 编辑器实例（必须 shallowRef）
 const editorRef = shallowRef(null)
+
+const props = defineProps({
+  initialContent: {  // 添加接收初始内容的 prop
+    type: String,
+    default: ''
+  }
+});
 
 // 编辑器内容
 const valueHtml = ref('')
@@ -28,12 +35,16 @@ onBeforeUnmount(() => {
 // 创建回调
 const handleCreated = editor => {
   editorRef.value = editor
+  if (props.initialContent) {
+    editor.setHtml(props.initialContent);
+  }
+  // 添加onchange事件监听
+  editor.on('change', () => {
+    const html = editor.getHtml()
+    emits('content-change', html)
+  })
 }
 
-// 然后在 watch 或 editor.on 中触发事件
-watch(valueHtml, (newVal) => {
-  emits('content-change', newVal)
-})
 </script>
 
 <template>

@@ -5,9 +5,12 @@ import Upload from '@/components/upload/Upload.vue';
 import { ElMessage } from 'element-plus';
 import router from '@/router';
 import upload from '@/util/upload';
+import { useUserStore } from '@/stores/user';
 
+const userStore = useUserStore()
 const newsFormRef = ref()
 const newsForm = reactive({
+  author:userStore.userInfo.username,
   title:'',
   content:'',
   category:0,

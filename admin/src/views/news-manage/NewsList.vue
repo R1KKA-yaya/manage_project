@@ -3,12 +3,21 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { View, Edit, Delete } from '@element-plus/icons-vue'
 import formatTime from '@/util/formatTime';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
+const router = useRouter()
+const userStore = useUserStore()
 const tableData = ref([])
 const previewData = ref({})
 const dialogFormVisible = ref(false)
 const getTableData = async () => {
-  const res = await axios.get('/adminapi/news/list')
+  const res = await axios.get('/adminapi/news/list',{
+      params: {
+        author: userStore.userInfo.username
+      }
+    })
+    console.log(res)
   tableData.value = res.data.data
 }
 const categoryFormat = (category) => {
@@ -75,7 +84,8 @@ const handleDelete = async (item) => {
             @click="handlePreview(scope.row)" />
           <el-button 
             :icon="Edit" 
-            circle />
+            circle
+            @click="router.push(`/news-manage/newsedit/${scope.row._id}`)" />
           <el-popconfirm title="你确定要删除吗？"
             confirmButtonText="确定"
             cancelButtonText="取消"
