@@ -38,7 +38,7 @@ onMounted(()=>{
           <span>公司产品</span>
         </div>
       </template>
-      <el-carousel :interval="4000" type="card" height="300px">
+      <el-carousel v-if="LoopData.length" :interval="4000" type="card" height="300px">
         <el-carousel-item v-for="item in LoopData" :key="item">
           <div :style="{ 
             backgroundImage: `url(http://localhost:3000/${item.cover})`,
@@ -58,7 +58,7 @@ onMounted(()=>{
     margin-top: 50px;
   }
   .el-carousel__item h3 {
-    color: #475669;
+    color: white;
     opacity: 0.75;
     line-height: 300px;
     margin: 0;
